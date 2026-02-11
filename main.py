@@ -1,31 +1,40 @@
-from setup import *
+
 from ui import *
-
-
-
 
 
 def update():
     if held_keys['left mouse']:
-        if held_item == 'gun':
+        if player.held_item == 'gun':
             shoot()
+    if held_keys['space'] and player.held_item == 'flyer':
+            # self.gravity = 0
+            player.fly()
+            
 
 
 def input(key):
 
-    global held_item
+    global player
     # Cycle items
     if key in ('scroll down', 'scroll up'):
             
 
 
-        idx = inventory.index(held_item)
+        idx = player.inventory.index(player.held_item)
         if key == 'scroll down':
-            next_idx = (idx + 1) % len(inventory)
+            next_idx = (idx + 1) % len(player.inventory)
+            if player.held_item == 'gun':
+                player.gun.visible = True
+            else:
+                player.gun.visible = False
         else:
-            next_idx = (idx - 1) % len(inventory)
-            held_item = inventory[next_idx]
-        update_inventory_ui(item_held=held_item)
+            next_idx = (idx - 1) % len(player.inventory)
+            player.held_item = player.inventory[next_idx]
+            if player.held_item == 'gun':
+                player.gun.visible = True
+            else:
+                player.gun.visible = False
+        update_inventory_ui(item_held=player.held_item)
 
 
 def pause_input(key):
@@ -34,7 +43,7 @@ def pause_input(key):
 
         player.visible_self = editor_camera.enabled
         player.cursor.enabled = not editor_camera.enabled
-        gun.enabled = not editor_camera.enabled
+
         mouse.locked = not editor_camera.enabled
         editor_camera.position = player.position
 
@@ -48,6 +57,6 @@ sun.look_at(Vec3(1,-1,-1))
 Sky()
 
 add_ui()
-update_inventory_ui(held_item)
+update_inventory_ui(player.held_item)
 app.run()
 

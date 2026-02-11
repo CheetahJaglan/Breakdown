@@ -1,5 +1,5 @@
-from inventory import *
-from libraries import *
+    
+from setup import *
 
 # A global list to keep track of each inventory slot.
 inventory_slots = []
@@ -67,7 +67,7 @@ def update_inventory_ui(item_held):
     If there are fewer items than slots, remaining slots will be cleared.
     Also highlights the slot corresponding to the selected block (block_to_place).
     """
-    items_list = inventory 
+    items_list = player.inventory 
     for i, slot in enumerate(inventory_slots):
         if i < len(items_list):
             item_type = items_list[i]
