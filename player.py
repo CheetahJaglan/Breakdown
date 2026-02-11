@@ -6,7 +6,7 @@ class Player(Entity):
         self.speed = 8
         self.height = height
         self.camera_pivot = Entity(parent=self, y=self.height)
-        self.model = 'textures/enemy.obj'
+        self.model = 'assets/models/enemy.obj'
         self.z = -10
         self.color = color.black
         self.origin_y = -.5

@@ -72,7 +72,7 @@ def update_inventory_ui(item_held):
         if i < len(items_list):
             item_type = items_list[i]
             slot['icon'].color = color.rgba32(255, 255, 255, 255)
-            slot['icon'].texture = f'textures/inv/{item_type}_inv.png'
+            slot['icon'].texture = f'assets/inv/{item_type}_inv.png'
             slot['item_type'] = item_type
         else:
             # Clear any unused slots.

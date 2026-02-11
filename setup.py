@@ -46,7 +46,7 @@ def shoot():
 
 class Enemy(Entity):
     def __init__(self, **kwargs):
-        super().__init__(parent=shootables_parent, model=load_model('textures/enemy.obj') ,scale=(1), origin_y=-0.05, color=color.light_gray, collider='box',texture='textures/enemy.png', **kwargs)
+        super().__init__(parent=shootables_parent, model=load_model('assets/models/enemy.obj') ,scale=(1), origin_y=-0.05, color=color.light_gray, collider='box',texture='assets/models/enemy.png', **kwargs)
         self.health_bar = Entity(parent=self, y=3.25, model='cube', color=color.red, world_scale=(1.5,.1,.1))
         self.max_hp = 100
         self.hp = self.max_hp
