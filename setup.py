@@ -2,7 +2,6 @@ from player import *
 
 app = Ursina()
 
-random.seed(0)
 Entity.default_shader = lit_with_shadows_shader
 
 ground = Entity(model='plane', collider='box', scale=64, texture='grass', texture_scale=(4,4))
@@ -53,7 +52,6 @@ def shoot():
             mouse.hovered_entity.hp -= 10
             
 
-
 class Enemy(Entity):
     def __init__(self, **kwargs):
         super().__init__(parent=shootables_parent, model=load_model('assets/models/enemy.obj') ,scale=(1), origin_y=-0.05, color=color.light_gray, collider='box',texture='assets/models/enemy.png', **kwargs)
@@ -85,13 +83,19 @@ class Enemy(Entity):
         self._hp = value
         if value <= 0:
             destroy(self)
+            if self in enemies:
+                enemies.remove(self)
             return
 
         self.health_bar.world_scale_x = self.hp / self.max_hp * 1.5
         self.health_bar.alpha = 1
 
-
+enemies = []
 # Enemy()
-enemies = [Enemy(x=x*10) for x in range(4)]
+def spawn_enemy(**kwargs):
+    e = Enemy(**kwargs) 
+    enemies.append(e)
 
+
+[spawn_enemy(x=1*i) for i in range(8)]
 

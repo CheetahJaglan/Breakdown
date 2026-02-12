@@ -39,7 +39,8 @@ def input(key):
 
 
 def pause_input(key):
-    if key == 'tab':    # press tab to toggle edit/play mode
+    if key == 'tab': 
+        print(len(enemies))   # press tab to toggle edit/play mode
         editor_camera.enabled = not editor_camera.enabled
 
         player.visible_self = editor_camera.enabled
