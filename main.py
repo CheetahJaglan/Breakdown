@@ -9,7 +9,6 @@ def update():
     if held_keys['space'] and player.held_item == 'flyer':
             # self.gravity = 0
             player.fly()
-            
 
 
 def input(key):

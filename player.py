@@ -120,7 +120,7 @@ class Player(Entity):
         self.grounded = True
 
     def fly(self):
-        self.y += held_keys['space'] * time.dt * self.speed * 2
+        self.y += held_keys['space'] * time.dt * self.speed * 5
         
     def on_enable(self):
         mouse.locked = True
