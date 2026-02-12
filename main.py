@@ -4,7 +4,7 @@ from ui import *
 
 def update():
     if held_keys['left mouse']:
-        if player.held_item == 'gun':
+        if player.held_item == 'gun' or player.held_item == 'supergun':
             shoot()
     if held_keys['space'] and player.held_item == 'flyer':
             # self.gravity = 0
@@ -30,8 +30,9 @@ def input(key):
         else:
             next_idx = (idx - 1) % len(player.inventory)
             player.held_item = player.inventory[next_idx]
-            if player.held_item == 'gun':
+            if player.held_item == 'gun' or player.held_item == 'supergun':
                 player.gun.visible = True
+                player.gun.color = color.red if player.held_item == 'supergun' else color.white
             else:
                 player.gun.visible = False
         update_inventory_ui(item_held=player.held_item)

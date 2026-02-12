@@ -11,7 +11,7 @@ class Player(Entity):
         self.color = color.black
         self.origin_y = -.5
         self.collider = 'box'
-        self.inventory = ['gun', 'flyer']
+        self.inventory = ['gun', 'flyer','supergun']
         self.held_item = 'gun'
 
         camera.parent = self.camera_pivot
@@ -42,7 +42,7 @@ class Player(Entity):
             if ray.hit:
                 self.y = ray.world_point.y
 
-        self.gun = Entity(model='cube', parent=camera, position=(.5,-.25,.25), scale=(.3,.2,1), origin_z=-.5, color=color.red, on_cooldown=False)
+        self.gun = Entity(model='cube', parent=camera, position=(.5,-.25,.25), scale=(.3,.2,1), origin_z=-.5, color=color.white, on_cooldown=False)
         self.gun.muzzle_flash = Entity(parent=self.gun, z=1, world_scale=.5, model='quad', color=color.yellow, enabled=False)
 
 

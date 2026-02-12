@@ -27,20 +27,30 @@ for i in range(16):
     
 
 def shoot():
-    if (not player.gun.on_cooldown):
+    if player.held_item == 'gun':
+        if (not player.gun.on_cooldown):
 
 
         # print('shoot')
+            player.gun.on_cooldown = True
+            player.gun.muzzle_flash.enabled=True
+        
+            ursfx([(0.0, 0.0), (0.1, 0.9), (0.15, 0.75), (0.3, 0.14), (0.6, 0.0)], volume=0.5, wave='noise', pitch=random.uniform(-13,-12), pitch_change=-12, speed=3.0)
+            invoke(player.gun.muzzle_flash.disable, delay=.05)
+            invoke(setattr, player.gun, 'on_cooldown', False, delay=.15)
+            if mouse.hovered_entity and hasattr(mouse.hovered_entity, 'hp') and mouse.hovered_entity.hp > 0:
+                mouse.hovered_entity.blink(color.red)
+                mouse.hovered_entity.hp -= 10
+    elif player.held_item == 'supergun':
         player.gun.on_cooldown = True
         player.gun.muzzle_flash.enabled=True
         
-        ursfx([(0.0, 0.0), (0.1, 0.9), (0.15, 0.75), (0.3, 0.14), (0.6, 0.0)], volume=0.5, wave='noise', pitch=random.uniform(-13,-12), pitch_change=-12, speed=3.0)
+        ursfx([(0.0, 0.0), (0.1, 0.9), (0.15, 0.75), (0.3, 0.14), (0.6, 0.0)], volume=1, wave='noise', pitch=random.uniform(-8,-7), pitch_change=-12, speed=3.0)
         invoke(player.gun.muzzle_flash.disable, delay=.05)
         invoke(setattr, player.gun, 'on_cooldown', False, delay=.15)
         if mouse.hovered_entity and hasattr(mouse.hovered_entity, 'hp') and mouse.hovered_entity.hp > 0:
             mouse.hovered_entity.blink(color.red)
             mouse.hovered_entity.hp -= 10
-
             
 
 
