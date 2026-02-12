@@ -4,7 +4,7 @@ app = Ursina()
 
 Entity.default_shader = lit_with_shadows_shader
 
-ground = Entity(model='plane', collider='box', scale=64, texture='grass', texture_scale=(4,4))
+ground = Entity(model='plane', collider='box', scale=256, texture='grass', texture_scale=(4,4))
 player = Player()
 editor_camera = EditorCamera(enabled=False, ignore_paused=True)
 
@@ -15,10 +15,10 @@ shootables_parent = Entity()
 mouse.traverse_target = shootables_parent
 
 
-for i in range(16):
+for i in range(64):
     Entity(model='cube', origin_y=-.5, scale=2, texture='brick', texture_scale=(1,2),
-        x=random.uniform(-8,8),
-        z=random.uniform(-8,8) + 8,
+        x=random.uniform(-32,32),
+        z=random.uniform(-32,32) + 20,
         collider='box',
         scale_y = random.uniform(2,3),
         color=color.hsv(0, 0, random.uniform(.9, 1))

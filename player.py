@@ -8,6 +8,7 @@ class Player(Entity):
         self.camera_pivot = Entity(parent=self, y=self.height)
         self.model = 'assets/models/enemy.obj'
         self.z = -10
+        self.y = 350
         self.color = color.black
         self.origin_y = -.5
         self.collider = 'box'
@@ -36,11 +37,7 @@ class Player(Entity):
         for key, value in kwargs.items():
             setattr(self, key ,value)
 
-        # make sure we don't fall through the ground if we start inside it
-        if self.gravity:
-            ray = raycast(self.world_position+(0,self.height,0), self.down, traverse_target=self.traverse_target, ignore=self.ignore_list)
-            if ray.hit:
-                self.y = ray.world_point.y
+
 
         self.gun = Entity(model='cube', parent=camera, position=(.5,-.25,.25), scale=(.3,.2,1), origin_z=-.5, color=color.white, on_cooldown=False)
         self.gun.muzzle_flash = Entity(parent=self.gun, z=1, world_scale=.5, model='quad', color=color.yellow, enabled=False)
