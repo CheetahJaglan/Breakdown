@@ -2,6 +2,10 @@ from player import *
 
 app = Ursina()
 
+
+#sounds
+boss_death_sound = Audio('assets/audio/bossdeath.mp3', autoplay=False, volume=0.5)
+boss_spawn_sound = Audio('assets/audio/bossspawn.mp3', autoplay=False, volume=1.5)
 Entity.default_shader = lit_with_shadows_shader
 
 ground = Entity(model='plane', collider='box', scale=256, texture='grass', texture_scale=(4,4))
@@ -53,7 +57,7 @@ def shoot():
                   pitch=random.uniform(-13,-12), pitch_change=-12, speed=3.0)
 
             invoke(player.gun.muzzle_flash.disable, delay=.05)
-            invoke(setattr, player.gun, 'on_cooldown', False, delay=.15)
+            invoke(setattr, player.gun, 'on_cooldown', False, delay=.3)
 
             # 👉 Damage check (distance-limited)
             if target and hasattr(target, 'hp') and target.hp > 0:
@@ -68,16 +72,16 @@ def shoot():
             player.gun.muzzle_flash.enabled = True
 
             ursfx([(0.0, 0.0), (0.1, 0.9), (0.15, 0.75), (0.3, 0.14), (0.6, 0.0)],
-                  volume=1, wave='noise',
-                  pitch=random.uniform(-8,-7), pitch_change=-12, speed=3.0)
+                  volume=0.5, wave='noise',
+                  pitch=random.uniform(-13,-12), pitch_change=-12, speed=3.0)
 
             invoke(player.gun.muzzle_flash.disable, delay=.05)
-            invoke(setattr, player.gun, 'on_cooldown', False, delay=.15)
+            invoke(setattr, player.gun, 'on_cooldown', False, delay=0.1)
 
             # 👉 Damage check (distance-limited)
             if target and hasattr(target, 'hp') and target.hp > 0:
                 dist = distance_xz(player.position, target.position)
-                if dist <= 15:
+                if dist <= 15:   # only damage if close enough
                     target.blink(color.red)
                     target.hp -= 100
 
@@ -116,6 +120,7 @@ class Enemy(Entity):
         self._hp = value
         if value <= 0:
             destroy(self)
+            ursfx([(0.0, 0.0), (0.23, 0.1), (0.52, 0.28), (0.92, 0.48), (1.11, 1.0)], volume=1.0, wave='noise', pitch=-8, pitch_change=-10, speed=3.3)
             if self in enemies:
                 enemies.remove(self)
                 if len(enemies) == 0:
@@ -131,7 +136,7 @@ class Enemy(Entity):
         self.health_bar.alpha = 1
 class Boss(Entity):
     def __init__(self, **kwargs):
-        super().__init__(parent=shootables_parent, model=load_model('assets/models/enemy.obj') ,scale=(5), origin_y=-0.05,x=20, color=color.light_gray, collider='box',texture='assets/models/boss.png', **kwargs)
+        super().__init__(parent=shootables_parent, model=load_model('assets/models/enemy.obj') ,scale=(3), origin_y=-0.05,x=20, color=color.light_gray, collider='box',texture='assets/models/boss.png', **kwargs)
         
         self.health_bar = Entity(parent=self, y=3.25, model='cube', color=color.blue, world_scale=(1.5,.1,.1))
         self.max_hp = 1000
@@ -162,7 +167,9 @@ class Boss(Entity):
         global wave
         self._hp = value
         if value <= 0:
-            destroy(self)
+            boss_death_sound.play()
+            invoke(destroy(self),delay=3)
+
             return
 
         self.health_bar.world_scale_x = self.hp / self.max_hp * 1.5
@@ -173,7 +180,7 @@ def spawn_enemy(**kwargs):
     e = Enemy(**kwargs) 
     enemies.append(e)
 def spawn_boss():
-    ursfx([(0.0, 1.0), (0.24, 1.0), (0.41, 0.97), (0.79, 0.76), (1.34, 0.0)], volume=1.0, wave='noise', pitch=-28, pitch_change=10, speed=0.5)
+    boss_spawn_sound.play()
     Boss()
 
 [spawn_enemy(x=1*i) for i in range(wave * 1)]

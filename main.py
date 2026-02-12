@@ -9,6 +9,7 @@ def update():
     if held_keys['space'] and player.held_item == 'flyer':
             # self.gravity = 0
             player.fly()
+    
 
 
 def input(key):
@@ -37,20 +38,6 @@ def input(key):
         update_inventory_ui(item_held=player.held_item)
 
 
-def pause_input(key):
-    if key == 'tab': 
-        print(len(enemies))   # press tab to toggle edit/play mode
-        editor_camera.enabled = not editor_camera.enabled
-
-        player.visible_self = editor_camera.enabled
-        player.cursor.enabled = not editor_camera.enabled
-
-        mouse.locked = not editor_camera.enabled
-        editor_camera.position = player.position
-
-        application.paused = editor_camera.enabled
-
-pause_handler = Entity(ignore_paused=True, input=pause_input)
 
 
 sun = DirectionalLight()
