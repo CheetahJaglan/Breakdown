@@ -14,6 +14,21 @@ wave = 1
 shootables_parent = Entity()
 mouse.traverse_target = shootables_parent
 
+            
+wave_popup = Text(
+    text='Wave 1',
+    parent=camera.ui,
+    origin=(0, .5),     # anchor from top-center of text
+    position=(0, .45),  # near top of screen
+    scale=3
+)
+
+
+def show_wave(w):
+    wave_popup.text = f'Wave {w}'
+    wave_popup.alpha = 1
+    invoke(setattr, wave_popup, 'alpha', 0, delay=2)
+
 
 for i in range(64):
     Entity(model='cube', origin_y=-.5, scale=2, texture='brick', texture_scale=(1,2),
@@ -106,6 +121,7 @@ class Enemy(Entity):
                 if len(enemies) == 0:
                     wave += 1
                     [spawn_enemy(x=1*i,z=1) for i in range(wave * 1)]
+                    show_wave(wave)
 
                     if wave % 5 == 0:
                         spawn_boss()
