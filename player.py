@@ -29,7 +29,7 @@ class Player(Entity):
         self.fall_after = .35 # will interrupt jump up
         self.jumping = False
         self.air_time = 0
-
+        self.hp = 100
         self.traverse_target = scene     # by default, it will collide with everything. change this to change the raycasts' traverse targets.
         self.ignore_list = [self, ]
 
@@ -49,14 +49,13 @@ class Player(Entity):
 
     def update(self):
         self.rotation_y += mouse.velocity[0] * self.mouse_sensitivity[1]
-
         self.camera_pivot.rotation_x -= mouse.velocity[1] * self.mouse_sensitivity[0]
         self.camera_pivot.rotation_x= clamp(self.camera_pivot.rotation_x, -90, 90)
-
         self.direction = Vec3(
-            self.forward * (held_keys['w'] - held_keys['s'])
-            + self.right * (held_keys['d'] - held_keys['a'])
+        self.forward * ((held_keys['w'] ) - (held_keys['s'] + held_keys['down_arrow']))
+        + self.right * ((held_keys['d'] ) - (held_keys['a'] + held_keys['left_arrow']))
             ).normalized()
+
 
         feet_ray = raycast(self.position+Vec3(0,0.5,0), self.direction, traverse_target=self.traverse_target, ignore=self.ignore_list, distance=.5, debug=False)
         head_ray = raycast(self.position+Vec3(0,self.height-.1,0), self.direction, traverse_target=self.traverse_target, ignore=self.ignore_list, distance=.5, debug=False)

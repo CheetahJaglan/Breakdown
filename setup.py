@@ -40,14 +40,31 @@ def show_wave(w):
     invoke(setattr, wave_popup, 'alpha', 0, delay=2)
 
 
-for i in range(64):
-    Entity(model='cube', origin_y=-.5, scale=2, texture='brick', texture_scale=(1,2),
-        x=random.uniform(-32,32),
-        z=random.uniform(-32,32) + 20,
-        collider='box',
-        scale_y = random.uniform(2,3),
-        color=color.hsv(0, 0, random.uniform(.9, 1))
-        )
+half = 64
+hole_half = 16
+
+for x in range(-half, half):
+    for z in range(-half, half):
+
+        # Skip the middle 64x64 area
+        if -hole_half <= x < hole_half and -hole_half <= z < hole_half:
+            continue
+
+        if random.random() < 0.02:  # 5% chance to spawn a block
+
+            Entity(
+            model='cube',
+            origin_y=-.5,
+            scale=2,
+            texture='brick',
+            texture_scale=(1,2),
+            x=x * 2,     # spacing (match scale=2)
+            z=z * 2,
+            collider='box',
+            scale_y=random.uniform(2, 3),
+            color=color.hsv(0, 0, random.uniform(.9, 1))
+            )
+
     
 
 def shoot():

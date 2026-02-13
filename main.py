@@ -14,6 +14,15 @@ def update():
         enemy_groans[random.randint(0,len(enemy_groans)-1)].play()
 
 
+def e5seccheck():
+    if player.position.y < -50:
+        player.position = Vec3(0,350,-10)
+    invoke(e5seccheck, delay=10)
+
+e5seccheck() # start the loop
+
+
+
 def input(key):
 
     global player
