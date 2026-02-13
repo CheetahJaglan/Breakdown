@@ -1,4 +1,4 @@
-from libraries import *
+from particles import *
 class Player(Entity):
     def __init__(self, height=2, **kwargs):
         self.cursor = Entity(parent=camera.ui, model='quad', color=color.pink, scale=.008, rotation_z=45)

@@ -10,6 +10,8 @@ def update():
             # self.gravity = 0
             player.fly()
     
+    if random.randint(0, 500) == 1 and enemies:
+        enemy_groans[random.randint(0,len(enemy_groans)-1)].play()
 
 
 def input(key):

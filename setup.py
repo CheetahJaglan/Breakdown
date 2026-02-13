@@ -6,6 +6,12 @@ app = Ursina()
 #sounds
 boss_death_sound = Audio('assets/audio/bossdeath.mp3', autoplay=False, volume=0.5)
 boss_spawn_sound = Audio('assets/audio/bossspawn.mp3', autoplay=False, volume=1.5)
+enemy_death_sound = Audio('assets/audio/enemydeath.ogg', autoplay=False, volume=0.5)
+enemy_groans = [Audio(f'assets/audio/groan{i}.ogg', autoplay=False, volume=1) for i in range(1,3)]
+hurt_sounds = [Audio(f'assets/audio/hurt{i}.ogg', autoplay=False, volume=1) for i in range(1,2)]
+
+
+
 Entity.default_shader = lit_with_shadows_shader
 
 ground = Entity(model='plane', collider='box', scale=256, texture='grass', texture_scale=(4,4))
@@ -55,6 +61,7 @@ def shoot():
             ursfx([(0.0, 0.0), (0.1, 0.9), (0.15, 0.75), (0.3, 0.14), (0.6, 0.0)],
                   volume=0.5, wave='noise',
                   pitch=random.uniform(-13,-12), pitch_change=-12, speed=3.0)
+            
 
             invoke(player.gun.muzzle_flash.disable, delay=.05)
             invoke(setattr, player.gun, 'on_cooldown', False, delay=.3)
@@ -62,7 +69,8 @@ def shoot():
             # 👉 Damage check (distance-limited)
             if target and hasattr(target, 'hp') and target.hp > 0:
                 dist = distance_xz(player.position, target.position)
-                if dist <= 15:   # only damage if close enough
+                if dist <= 15:
+                    hurt_sounds[random.randint(0,len(hurt_sounds)-1)].play()   # only damage if close enough
                     target.blink(color.red)
                     target.hp -= 10
 
@@ -119,8 +127,10 @@ class Enemy(Entity):
         global wave
         self._hp = value
         if value <= 0:
+            ParticleSystem(world_position=self.world_position+Vec3(0,1,0), color=color.blue)
             destroy(self)
-            ursfx([(0.0, 0.0), (0.23, 0.1), (0.52, 0.28), (0.92, 0.48), (1.11, 1.0)], volume=1.0, wave='noise', pitch=-8, pitch_change=-10, speed=3.3)
+
+            enemy_death_sound.play()
             if self in enemies:
                 enemies.remove(self)
                 if len(enemies) == 0:
@@ -136,7 +146,7 @@ class Enemy(Entity):
         self.health_bar.alpha = 1
 class Boss(Entity):
     def __init__(self, **kwargs):
-        super().__init__(parent=shootables_parent, model=load_model('assets/models/enemy.obj') ,scale=(3), origin_y=-0.05,x=20, color=color.light_gray, collider='box',texture='assets/models/boss.png', **kwargs)
+        super().__init__(parent=shootables_parent, model=load_model('assets/models/boss.obj') ,scale=(9), origin_y=-0.05,x=20, color=color.light_gray, collider='box',texture='assets/models/boss.png', **kwargs)
         
         self.health_bar = Entity(parent=self, y=3.25, model='cube', color=color.blue, world_scale=(1.5,.1,.1))
         self.max_hp = 1000
@@ -156,7 +166,7 @@ class Boss(Entity):
         # print(hit_info.entity)
         if hit_info.entity == player:
             if dist > 2:
-                self.position += self.forward * time.dt * 5
+                self.position += self.forward * time.dt 
 
     @property
     def hp(self):
@@ -168,7 +178,8 @@ class Boss(Entity):
         self._hp = value
         if value <= 0:
             boss_death_sound.play()
-            invoke(destroy(self),delay=3)
+            ParticleSystem(world_position=self.world_position+Vec3(0,20,0), color=color.red, duration=2, particle_count=1000, )
+            destroy(self)
 
             return
 
