@@ -12,7 +12,7 @@ def update():
     
     if random.randint(0, 500) == 1 and enemies:
         enemy_groans[random.randint(0,len(enemy_groans)-1)].play()
-    score_popup.text= f'Score : {score}'
+    
 
     
 
