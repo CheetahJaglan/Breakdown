@@ -157,6 +157,7 @@ class Enemy(Entity):
 
                     if wave % 5 == 0:
                         spawn_boss()
+                        ground.color = color.hsv(random.uniform(0,10), 0.5, random.uniform(.9, 1))
             return
 
         self.health_bar.world_scale_x = self.hp / self.max_hp * 1.5
@@ -195,7 +196,8 @@ class Boss(Entity):
         self._hp = value
         if value <= 0:
             boss_death_sound.play()
-            ParticleSystem(world_position=self.world_position+Vec3(0,20,0), color=color.red, duration=2, particle_count=1000, )
+            ParticleSystem(world_position=self.world_position+Vec3(0,20,0), color=color.red, duration=2, particle_count=1000 )
+            ground.color = color.hsv(0, 0, random.uniform(.9, 1))
             destroy(self)
 
             return
