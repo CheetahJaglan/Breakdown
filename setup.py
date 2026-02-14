@@ -20,6 +20,7 @@ editor_camera = EditorCamera(enabled=False, ignore_paused=True)
 
 
 wave = 1
+score = 0
 
 shootables_parent = Entity()
 mouse.traverse_target = shootables_parent
@@ -68,6 +69,7 @@ for x in range(-half, half):
     
 
 def shoot():
+    global score
     target = mouse.hovered_entity
 
     if player.held_item == 'gun':
@@ -90,6 +92,7 @@ def shoot():
                     hurt_sounds[random.randint(0,len(hurt_sounds)-1)].play()   # only damage if close enough
                     target.blink(color.red)
                     target.hp -= 10
+                    score += 1
 
     elif player.held_item == 'supergun':
         if not player.gun.on_cooldown:
@@ -108,7 +111,8 @@ def shoot():
                 dist = distance_xz(player.position, target.position)
                 if dist <= 15:   # only damage if close enough
                     target.blink(color.red)
-                    target.hp -= 100
+                    target.hp -= 5
+                    score += 0.5
 
             
 
@@ -141,22 +145,26 @@ class Enemy(Entity):
 
     @hp.setter
     def hp(self, value):
-        global wave
+        global wave , score
         self._hp = value
         if value <= 0:
             ParticleSystem(world_position=self.world_position+Vec3(0,1,0), color=color.blue)
             destroy(self)
+            score += 5
 
             enemy_death_sound.play()
             if self in enemies:
                 enemies.remove(self)
+
                 if len(enemies) == 0:
                     wave += 1
                     [spawn_enemy(x=1*i,z=1) for i in range(wave * 1)]
                     show_wave(wave)
+                    score += 10 * wave
 
                     if wave % 5 == 0:
                         spawn_boss()
+
                         ground.color = color.hsv(random.uniform(0,10), 0.5, random.uniform(.9, 1))
             return
 
@@ -198,6 +206,7 @@ class Boss(Entity):
             boss_death_sound.play()
             ParticleSystem(world_position=self.world_position+Vec3(0,20,0), color=color.red, duration=2, particle_count=1000 )
             ground.color = color.hsv(0, 0, random.uniform(.9, 1))
+            score += 70
             destroy(self)
 
             return

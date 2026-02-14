@@ -19,10 +19,6 @@ def update():
 def e5seccheck():
     if player.position.y < -50:
         player.position = Vec3(0,350,-10)
-    # if wave%5==0 and wave != 0:
-        
-    # else:
-    #     
     invoke(e5seccheck, delay=10)
 
 e5seccheck() # start the loop
