@@ -93,6 +93,7 @@ def shoot():
                     target.blink(color.red)
                     target.hp -= 10
                     score += 1
+                    print(score)
 
     elif player.held_item == 'supergun':
         if not player.gun.on_cooldown:
@@ -113,6 +114,7 @@ def shoot():
                     target.blink(color.red)
                     target.hp -= 5
                     score += 0.5
+                    print(score)
 
             
 
@@ -151,6 +153,7 @@ class Enemy(Entity):
             ParticleSystem(world_position=self.world_position+Vec3(0,1,0), color=color.blue)
             destroy(self)
             score += 5
+            print(score)
 
             enemy_death_sound.play()
             if self in enemies:
@@ -161,6 +164,7 @@ class Enemy(Entity):
                     [spawn_enemy(x=1*i,z=1) for i in range(wave * 1)]
                     show_wave(wave)
                     score += 10 * wave
+                    print(score)
 
                     if wave % 5 == 0:
                         spawn_boss()
@@ -207,6 +211,7 @@ class Boss(Entity):
             ParticleSystem(world_position=self.world_position+Vec3(0,20,0), color=color.red, duration=2, particle_count=1000 )
             ground.color = color.hsv(0, 0, random.uniform(.9, 1))
             score += 70
+            print(score)
             destroy(self)
 
             return
