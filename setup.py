@@ -33,6 +33,13 @@ wave_popup = Text(
     position=(0, .45),  # near top of screen
     scale=3
 )
+score_popup = Text(
+    text=f'Score: {score}',  # Initialize with score value
+    parent=camera.ui,
+    origin=(0, 1),  # Anchor from top-center of text
+    position=(0, -0.45),  # Near top of screen (adjust as needed)
+    scale=2  # Adjust size of score
+)
 
 
 def show_wave(w):
